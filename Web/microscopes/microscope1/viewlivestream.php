@@ -68,6 +68,19 @@
             <iframe width="560" height="349" src="<?php echo $youtube ?>" frameborder="0" allowfullscreen></iframe>
           </div>
           <hr>
+            <div class="UserInterface" style="display: inline-block; padding-left:5px; padding-right:5px; " >
+              <form>
+              <label for="zoomInput"><b>Zoom: </b></label>
+                <input type="text" id="zoomInput" placeholder="Zoom Level">
+              </form>
+              <button>Take Photo</button>
+              <button>Light </button>
+              <form>
+              <label for="timerInput"><b>Timer: </b></label>
+                <input type="text" placeholder="Seconds">
+              </form>
+            </div>
+          <hr>
           <button class="btn" name ="viewphoto-submit" type="submit" onclick="window.location.href='./viewphotos.php'">View Archived Photos</button>
           <button class="btn" name ="googledocs-submit" type="submit" onclick="window.open('https://docs.google.com/forms/d/1Oa1WRS4LZLZQ9nuTjRTILW01rp9zHC7eG6cFWW6NvHs/edit')">Complete Experiment WorkSheet</button>
         </div>
