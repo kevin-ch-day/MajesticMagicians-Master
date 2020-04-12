@@ -56,7 +56,6 @@
 async function moveMotor(){
 	    $.ajax({
         url: "http://localhost/includes/jsontoserver.inc.php",
-	   // url: "http://75.168.242.3:5000/api/light/",
         type: "GET",
         data: { zoomDirection: true, zoomHowMuch: 100 },
         dataType: "json",
@@ -80,7 +79,6 @@ async function moveMotor(){
 async function light(v){
 	    $.ajax({
         url: "http://localhost/includes/jsontoserver.inc.php",
-	   // url: "http://75.168.242.3:5000/api/light/",
         type: "GET",
         data: { setLightValue: v, light: "0" },
         dataType: "json",
