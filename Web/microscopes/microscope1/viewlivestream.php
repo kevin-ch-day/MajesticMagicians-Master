@@ -51,6 +51,56 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="../../styles/streampage-style.css">
   <link rel="stylesheet" href="../../styles/navbar-style.css">
+  <script>
+  
+async function moveMotor(){
+	    $.ajax({
+        url: "http://localhost/includes/jsontoserver.inc.php",
+        type: "GET",
+        data: { zoomDirection: true, zoomHowMuch: 100 },
+        dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    processResponse(result);
+                    break;
+                default:
+                    resultDiv.html(result);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        //alert(xhr.status);
+        //alert(thrownError);
+        }
+    });
+}
+
+async function light(v){
+	    $.ajax({
+        url: "http://localhost/includes/jsontoserver.inc.php",
+        type: "GET",
+        data: { setLightValue: v, light: "0" },
+        dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    processResponse(result);
+                    break;
+                default:
+                    resultDiv.html(result);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        //alert(xhr.status);
+        //alert(thrownError);
+        }
+    });
+}
+
+
+  </script>
 </head>
 <body>
 
@@ -67,6 +117,21 @@
             <!-- Put YOUTUBE link below -->
             <iframe width="560" height="349" src="<?php echo $youtube ?>" frameborder="0" allowfullscreen></iframe>
           </div>
+          <hr>
+            <div class="UserInterface" style="display: inline-block; padding-left:5px; padding-right:5px; " >
+              <form action="">
+              <label for="zoomInput"><b>Zoom: </b></label>
+                <input type="text" id="zoomInput" placeholder="Zoom Level">
+              </form>
+              <button onclick="light(1)">Light On</button>
+              <button onclick="moveMotor()">Move Motor</button>
+              <button onclick="light(0)">Light Off</button>
+              <form action="">
+              <label for="timerInput"><b>Timer: </b></label>
+                <input type="text" placeholder="Seconds">
+                <input type="submit" value="Submit">
+              </form>
+            </div>
           <hr>
           <button class="btn" name ="viewphoto-submit" type="submit" onclick="window.location.href='./viewphotos.php'">View Archived Photos</button>
           <button class="btn" name ="googledocs-submit" type="submit" onclick="window.open('https://docs.google.com/forms/d/1Oa1WRS4LZLZQ9nuTjRTILW01rp9zHC7eG6cFWW6NvHs/edit')">Complete Experiment WorkSheet</button>
