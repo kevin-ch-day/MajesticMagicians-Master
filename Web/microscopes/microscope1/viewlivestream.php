@@ -51,6 +51,26 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="../../styles/streampage-style.css">
   <link rel="stylesheet" href="../../styles/navbar-style.css">
+  <script>
+
+let xhttp = new XMLHttpRequestion();
+let url = "localhost";
+xhttp.open("POST", url, true);
+xhttp.setRequestHeader("Content-Type", "application/json"); 
+
+function turnLightOn(){
+
+}
+
+function turnLightOff(){
+
+}
+
+function takePhoto(){
+
+}
+
+  </script>
 </head>
 <body>
 
@@ -69,15 +89,17 @@
           </div>
           <hr>
             <div class="UserInterface" style="display: inline-block; padding-left:5px; padding-right:5px; " >
-              <form>
+              <form action="">
               <label for="zoomInput"><b>Zoom: </b></label>
                 <input type="text" id="zoomInput" placeholder="Zoom Level">
               </form>
-              <button>Take Photo</button>
-              <button>Light </button>
-              <form>
+              <button onclick="takePhoto()">Take Photo</button>
+              <button onclick="turnLightOn()">Light On</button>
+              <button onclick="turnLightOff()">Light Off</button>
+              <form action="">
               <label for="timerInput"><b>Timer: </b></label>
                 <input type="text" placeholder="Seconds">
+                <input type="submit" value="Submit">
               </form>
             </div>
           <hr>
