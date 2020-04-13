@@ -76,11 +76,11 @@ async function moveMotor(){
     });
 }
 
-async function light(v){
+async function light(bool_arg){
 	    $.ajax({
         url: "http://localhost/includes/jsontoserver.inc.php",
         type: "GET",
-        data: { setLightValue: v, light: "0" },
+        data: { setLightValue: bool_arg, light: "0" },
         dataType: "json",
 		//contentType: "application/json; charset=utf-8",
         success: function (result) {
@@ -97,6 +97,12 @@ async function light(v){
         //alert(thrownError);
         }
     });
+}
+
+async function zoom(level_arg){
+}
+
+async function timer(int_arg){
 }
 
 
@@ -119,18 +125,22 @@ async function light(v){
           </div>
           <hr>
             <div class="UserInterface" style="display: inline-block; padding-left:5px; padding-right:5px; " >
-              <form action="">
+              
+            <form action="" method="">
               <label for="zoomInput"><b>Zoom: </b></label>
-                <input type="text" id="zoomInput" placeholder="Zoom Level">
+                <input type="text" placeholder="Zoom Level" id="zoomInput">
               </form>
+
               <button onclick="light(1)">Light On</button>
               <button onclick="moveMotor()">Move Motor</button>
               <button onclick="light(0)">Light Off</button>
-              <form action="">
+              
+              <form action="" method="">
               <label for="timerInput"><b>Timer: </b></label>
-                <input type="text" placeholder="Seconds">
+                <input type="text" placeholder="Seconds" id="timerInput">
                 <input type="submit" value="Submit">
               </form>
+              
             </div>
           <hr>
           <button class="btn" name ="viewphoto-submit" type="submit" onclick="window.location.href='./viewphotos.php'">View Archived Photos</button>
