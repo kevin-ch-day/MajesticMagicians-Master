@@ -1,3 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>VirtualScope</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../../styles/streampage-style.css">
+  <link rel="stylesheet" href="../../styles/navbar-style.css">
+
 <?php
   require '../../includes/sessionsconfig.inc.php';
   require '../../includes/dbh.inc.php';
@@ -36,21 +51,6 @@
   }
 
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>VirtualScope</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="../../styles/streampage-style.css">
-  <link rel="stylesheet" href="../../styles/navbar-style.css">
   <script>
   
 async function moveMotor(){
@@ -99,12 +99,61 @@ async function light(bool_arg){
     });
 }
 
-async function zoom(level_arg){
+async function zoom(){
+  var z = document.forms["zoomForm"]["zoomInput"]
+  if(z.value.length == 0){
+    alert("Zoom value cant be zero");
+  }else{
+    $.ajax({
+        url: "http://localhost/includes/jsontoserver.inc.php",
+        type: "GET",
+        data: { command: "zoom", amount: z },
+        dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    processResponse(result);
+                    break;
+                default:
+                    resultDiv.html(result);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        //alert(xhr.status);
+        //alert(thrownError);
+        }
+    });
+  }
 }
 
-async function timer(int_arg){
+async function timer(){
+  var t = document.forms["timerForm"]["timerInput"];
+  if(t.value.length == 0){
+    alert("Timer value cant be zero");
+  }else{
+    $.ajax({
+        url: "http://localhost/includes/jsontoserver.inc.php",
+        type: "GET",
+        data: { command: "timer", amount: t },
+        dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    processResponse(result);
+                    break;
+                default:
+                    resultDiv.html(result);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        //alert(xhr.status);
+        //alert(thrownError);
+        }
+    });
+  }
 }
-
 
   </script>
 </head>
@@ -126,16 +175,17 @@ async function timer(int_arg){
           <hr>
             <div class="UserInterface" style="display: inline-block; padding-left:5px; padding-right:5px; " >
               
-            <form action="" method="">
+            <form onsubmit="zoom()" action="" method="" id="zoomForm">
               <label for="zoomInput"><b>Zoom: </b></label>
-                <input type="text" placeholder="Zoom Level" id="zoomInput">
+                <input type="text" id="zoomInput">
+                <input type="submit" value="Submit">
               </form>
 
               <button onclick="light(1)">Light On</button>
               <button onclick="moveMotor()">Move Motor</button>
               <button onclick="light(0)">Light Off</button>
               
-              <form action="" method="">
+              <form action="" method="" id="timerForm">
               <label for="timerInput"><b>Timer: </b></label>
                 <input type="text" placeholder="Seconds" id="timerInput">
                 <input type="submit" value="Submit">
