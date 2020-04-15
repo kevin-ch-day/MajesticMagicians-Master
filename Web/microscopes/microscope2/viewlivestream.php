@@ -1,3 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>VirtualScope</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../../styles/streampage-style.css">
+  <link rel="stylesheet" href="../../styles/navbar-style.css">
+
 <?php
   require '../../includes/sessionsconfig.inc.php';
   require '../../includes/dbh.inc.php';
@@ -36,21 +51,93 @@
   }
 
 ?>
+  <script>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>VirtualScope</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="../../styles/streampage-style.css">
-  <link rel="stylesheet" href="../../styles/navbar-style.css">
+async function light(bool_arg){
+	    $.ajax({
+        url: "http://localhost/includes/jsontoserver.inc.php",
+        type: "GET",
+        data: { device: "light", command: "switch", value: bool_arg },
+        dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    processResponse(result);
+                    break;
+                default:
+                    resultDiv.html(result);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        //alert(xhr.status);
+        //alert(thrownError);
+        }
+    });
+}
+
+async function zoom(){
+  var t = document.getElementById("zoomInput");
+  var x = parseFloat(t.value);
+  console.log(x);
+  if(x === 0 || isNaN(x)){
+    alert("Zoom value cannot be equal to zero");
+  }else{
+    $.ajax({
+        url: "http://localhost/includes/jsontoserver.inc.php",
+        type: "GET",
+        data: { device: "motor", command: "move", value: x },
+        dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    processResponse(result);
+                    break;
+                default:
+                    resultDiv.html(result);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        //alert(xhr.status);
+        //alert(thrownError);
+        }
+    });
+  }
+}
+
+
+async function timer(){
+  var t = document.getElementById("timerInput");
+  var x = parseFloat(t.value);
+  console.log(x);
+  if(x <= 0 || isNaN(x)){
+    alert("Timer value cant be under zero");
+  }else{
+    $.ajax({
+        url: "http://localhost/includes/jsontoserver.inc.php",
+        type: "GET",
+        data: { device: "light", command: "timer", value: x },
+        dataType: "json",
+		//contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    processResponse(result);
+                    break;
+                default:
+                    resultDiv.html(result);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        //alert(xhr.status);
+        //alert(thrownError);
+        }
+    });
+  }
+}
+
+  </script>
 </head>
 <body>
 
@@ -67,6 +154,23 @@
             <!-- Put YOUTUBE link below -->
             <iframe width="560" height="349" src="<?php echo $youtube ?>" frameborder="0" allowfullscreen></iframe>
           </div>
+          <hr>
+            <div class="UserInterface" style="display: inline-block; padding-left:5px; padding-right:5px; " >
+              
+              <label for="zoomInput"><b>Zoom: </b></label>
+                <input type="text" id="zoomInput">
+                <button onclick="zoom()">Zoom</button><br />
+
+              <button onclick="light(1)">Light On</button>
+              <button onclick="light(0)">Light Off</button><br />
+              
+              <label for="timerInput"><b>Timer: </b></label>
+                <input type="text" type="number" min="1" max="5" placeholder="Minutes" id="timerInput">
+
+              <button onclick="timer()">Timer Light On</button>
+
+              
+            </div>
           <hr>
           <button class="btn" name ="viewphoto-submit" type="submit" onclick="window.location.href='./viewphotos.php'">View Archived Photos</button>
           <button class="btn" name ="googledocs-submit" type="submit" onclick="window.open('https://docs.google.com/forms/d/1Oa1WRS4LZLZQ9nuTjRTILW01rp9zHC7eG6cFWW6NvHs/edit')">Complete Experiment WorkSheet</button>
