@@ -52,35 +52,12 @@
 
 ?>
   <script>
-  
-async function moveMotor(){
-	    $.ajax({
-        url: "http://localhost/includes/jsontoserver.inc.php",
-        type: "GET",
-        data: { zoomDirection: true, zoomHowMuch: 100 },
-        dataType: "json",
-		//contentType: "application/json; charset=utf-8",
-        success: function (result) {
-            switch (result) {
-                case true:
-                    processResponse(result);
-                    break;
-                default:
-                    resultDiv.html(result);
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-        //alert(xhr.status);
-        //alert(thrownError);
-        }
-    });
-}
 
 async function light(bool_arg){
 	    $.ajax({
         url: "http://localhost/includes/jsontoserver.inc.php",
         type: "GET",
-        data: { setLightValue: bool_arg, light: "0" },
+        data: { device: "light", command: "switch", value: bool_arg },
         dataType: "json",
 		//contentType: "application/json; charset=utf-8",
         success: function (result) {
@@ -100,14 +77,16 @@ async function light(bool_arg){
 }
 
 async function zoom(){
-  var z = document.forms["zoomForm"]["zoomInput"]
-  if(z.value.length == 0){
-    alert("Zoom value cant be zero");
+  var t = document.getElementById("zoomInput");
+  var x = parseFloat(t.value);
+  console.log(x);
+  if(x === 0 || isNaN(x)){
+    alert("Zoom value cannot be equal to zero");
   }else{
     $.ajax({
         url: "http://localhost/includes/jsontoserver.inc.php",
         type: "GET",
-        data: { command: "zoom", amount: z },
+        data: { device: "motor", command: "move", value: x },
         dataType: "json",
 		//contentType: "application/json; charset=utf-8",
         success: function (result) {
@@ -127,15 +106,18 @@ async function zoom(){
   }
 }
 
+
 async function timer(){
-  var t = document.forms["timerForm"]["timerInput"];
-  if(t.value.length == 0){
-    alert("Timer value cant be zero");
+  var t = document.getElementById("timerInput");
+  var x = parseFloat(t.value);
+  console.log(x);
+  if(x <= 0 || isNaN(x)){
+    alert("Timer value cant be under zero");
   }else{
     $.ajax({
         url: "http://localhost/includes/jsontoserver.inc.php",
         type: "GET",
-        data: { command: "timer", amount: t },
+        data: { device: "light", command: "timer", value: x },
         dataType: "json",
 		//contentType: "application/json; charset=utf-8",
         success: function (result) {
@@ -175,21 +157,18 @@ async function timer(){
           <hr>
             <div class="UserInterface" style="display: inline-block; padding-left:5px; padding-right:5px; " >
               
-            <form onsubmit="zoom()" action="" method="" id="zoomForm">
               <label for="zoomInput"><b>Zoom: </b></label>
                 <input type="text" id="zoomInput">
-                <input type="submit" value="Submit">
-              </form>
+                <button onclick="zoom()">Zoom</button><br />
 
               <button onclick="light(1)">Light On</button>
-              <button onclick="moveMotor()">Move Motor</button>
-              <button onclick="light(0)">Light Off</button>
+              <button onclick="light(0)">Light Off</button><br />
               
-              <form action="" method="" id="timerForm">
               <label for="timerInput"><b>Timer: </b></label>
-                <input type="text" placeholder="Seconds" id="timerInput">
-                <input type="submit" value="Submit">
-              </form>
+                <input type="text" type="number" min="1" max="5" placeholder="Minutes" id="timerInput">
+
+              <button onclick="timer()">Timer Light On</button>
+
               
             </div>
           <hr>
